@@ -1,4 +1,4 @@
-<?php namespace Cyberduck\LaravelWpApi;
+<?php namespace CompareAsiaGroup\LaravelWpApi;
 
 use GuzzleHttp\Client;
 

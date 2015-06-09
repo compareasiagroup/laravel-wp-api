@@ -1,11 +1,13 @@
 # laravel-wp-api
+This is a fork of [https://github.com/Cyber-Duck/laravel-wp-api](https://github.com/Cyber-Duck/laravel-wp-api).
+All credits go to [Cyber-Duck](https://github.com/Cyber-Duck).
 Laravel 5 package for the [Wordpress JSON REST API](https://github.com/WP-API/WP-API) 
 
 ## Install
 
 Simply add the following line to your `composer.json` and run install/update:
 
-    "cyberduck/laravel-wp-api": "dev-master"
+    "compareasiagroup/laravel-wp-api": "dev-master"
 
 ## Configuration
 
@@ -17,11 +19,11 @@ You will also need to add the service provider and optionally the facade alias t
 
 ```php
 'providers' => array(
-  'Cyberduck\LaravelWpApi\LaravelWpApiServiceProvider'
+  'CompareAsiaGroup\LaravelWpApi\LaravelWpApiServiceProvider'
 )
 
 'aliases' => array(
-  'WpApi' => 'Cyberduck\LaravelWpApi\Facades\WpApi'
+  'WpApi' => 'CompareAsiaGroup\LaravelWpApi\Facades\WpApi'
 ),
 ```
 
@@ -77,3 +79,8 @@ WpApi::search($query, $page);
 WpApi::archive($year, $month, $page);
 
 ```
+
+#### Credits
+
+[Cyber-Duck](https://github.com/Cyber-Duck/laravel-wp-api)
+[Laravel](http://laravel.com/)

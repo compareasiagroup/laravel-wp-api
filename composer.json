@@ -1,12 +1,12 @@
 {
-    "name": "cyberduck/laravel-wp-api",
+    "name": "compareasiagroup/laravel-wp-api",
     "description": "Laravel package for the Wordpress JSON REST API",
     "keywords": ["laravel", "package", "wordpress", "API", "REST"],
-    "license": "MIT",
+    "license": "BSD 2-Clause",
     "authors": [
         {
-            "name": "Ben Speakman",
-            "email": "ben@cyber-duck.co.uk"
+            "name": "CompareAsiaGroup",
+            "email": "engineering@compareasiagroup.com"
         }
     ],
     "require": {
@@ -19,7 +19,7 @@
             "src/migrations"
         ],
         "psr-0": {
-            "Cyberduck\\LaravelWpApi\\": "src/"
+            "CompareAsiaGroup\\LaravelWpApi\\": "src/"
         }
     },
     "minimum-stability": "stable"
