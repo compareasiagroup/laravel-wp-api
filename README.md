@@ -1,4 +1,6 @@
 # laravel-wp-api
+This is a fork of [https://github.com/Cyber-Duck/laravel-wp-api](https://github.com/Cyber-Duck/laravel-wp-api).
+All credits go to [Cyber-Duck](https://github.com/Cyber-Duck).
 Laravel 5 package for the [Wordpress JSON REST API](https://github.com/WP-API/WP-API) 
 
 ## Install
@@ -77,3 +79,8 @@ WpApi::search($query, $page);
 WpApi::archive($year, $month, $page);
 
 ```
+
+#### Credits
+
+[Cyber-Duck](https://github.com/Cyber-Duck/laravel-wp-api)
+[Laravel](http://laravel.com/)
