@@ -1,5 +1,6 @@
 <?php namespace CompareAsiaGroup\LaravelWpApi;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use GuzzleHttp\Client;
 
@@ -20,7 +21,7 @@ class LaravelWpApiServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->publishes([
-            __DIR__.'/../../config/config.php' => config_path('wp-api.php'),
+            __DIR__ . '/../../config/config.php' => config_path('wp-api.php'),
         ]);
 	}
 
@@ -33,11 +34,15 @@ class LaravelWpApiServiceProvider extends ServiceProvider {
 	{
 		$this->app->bindShared('wp-api', function ($app) {
 
-            $endpoint = $this->app['config']->get('wp-api.endpoint');
-            $auth     = $this->app['config']->get('wp-api.auth');
-            $client   = new Client();
+            $endpoint   = Config::get('wp-api.endpoint');
+            $prefix     = Config::get('wp-api.prefix', 'wp-api/');
+            $options    = [
+                'auth'  => Config::get('wp-api.auth', false),
+                'debug' => Config::get('wp-api.debug', false)
+            ];
+            $client     = new Client();
             
-            return new WpApi($endpoint, $client, $auth);
+            return new WpApi($endpoint, $prefix, $client, $options);
 
         });
 
