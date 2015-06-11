@@ -1,34 +1,45 @@
 <?php namespace CompareAsiaGroup\LaravelWpApi;
 
 use GuzzleHttp\Client;
+use CompareAsiaGroup\LaravelWpApi\Models\ArticleCollection;
 
 class WpApi
 {
 
     protected $client;
 
-    public function __construct($endpoint, Client $client, $auth = null)
+    public function __construct($endpoint, $prefix=null, Client $client, $options = [])
     {
+        $this->options = array_merge([
+            'auto' => null,
+            'debug' => false
+        ], $options);
+
         $this->endpoint = $endpoint;
         $this->client   = $client;
-        $this->auth     = $auth;
+
+        if ($prefix) {
+            $this->prefix = $prefix;
+        } else {
+            $this->prefix = 'wp-json/';
+        }
     }
 
     public function posts($page = null)
     {
-        return $this->_get('posts', ['page' => $page]);
+        return $this->_resultsCollection($this->_get('posts', ['page' => $page]));
     }
 
     public function pages($page = null)
     {
-        return $this->_get('posts', ['type' => 'page', 'page' => $page]);
+        return $this->_resultsCollection($this->_get('posts', ['type' => 'page', 'page' => $page]));
     }
 
     public function post($slug)
     {
         return $this->_get('posts', ['filter' => ['name' => $slug]]);
     }
-    
+
     public function page($slug)
     {
         return $this->_get('posts', ['type' => 'page', 'filter' => ['name' => $slug]]);
@@ -36,37 +47,37 @@ class WpApi
 
     public function categories()
     {
-        return $this->_get('taxonomies/category/terms');
+        return $this->_resultsCollection($this->_get('taxonomies/category/terms'));
     }
 
     public function tags()
     {
-        return $this->_get('taxonomies/post_tag/terms');
+        return $this->_resultsCollection($this->_get('taxonomies/post_tag/terms'));
     }
 
     public function category_posts($slug, $page = null)
     {
-        return $this->_get('posts', ['page' => $page, 'filter' => ['category_name' => $slug]]);
+        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['category_name' => $slug]]));
     }
 
     public function author_posts($name, $page = null)
     {
-        return $this->_get('posts', ['page' => $page, 'filter' => ['author_name' => $name]]);
+        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['author_name' => $name]]));
     }
 
     public function tag_posts($tags, $page = null)
     {
-        return $this->_get('posts', ['page' => $page, 'filter' => ['tag' => $tags]]);
+        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['tag' => $tags]]));
     }
 
     public function search($query, $page = null)
     {
-        return $this->_get('posts', ['page' => $page, 'filter' => ['s' => $query]]);
+        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['s' => $query]]));
     }
 
     public function archive($year, $month, $page = null)
     {
-        return $this->_get('posts', ['page' => $page, 'filter' => ['year' => $year, 'monthnum' => $month]]);
+        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['year' => $year, 'monthnum' => $month]]));
     }
 
     public function _get($method, array $query = array())
@@ -76,11 +87,11 @@ class WpApi
 
             $query = ['query' => $query];
 
-            if($this->auth) {
-                $query['auth'] = $this->auth;
+            if($this->options['auth']) {
+                $query['auth'] = $this->options['auth'];
             }
 
-            $response = $this->client->get($this->endpoint . '/wp-json/' . $method, $query);
+            $response = $this->client->get($this->endpoint . $this->prefix . $method, $query);
 
             $return = [
                 'results' => $response->json(),
@@ -107,6 +118,14 @@ class WpApi
 
         return $return;
 
+    }
+
+    protected function _resultsCollection ($response)
+    {
+        if(count($response) > 0) {
+            $response['results'] = new ArticleCollection($response['results']);
+        }
+        return $response;
     }
 
 }
