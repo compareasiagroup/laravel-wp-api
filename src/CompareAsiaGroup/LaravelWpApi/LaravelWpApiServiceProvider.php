@@ -37,8 +37,9 @@ class LaravelWpApiServiceProvider extends ServiceProvider {
             $endpoint   = Config::get('wp-api.endpoint');
             $prefix     = Config::get('wp-api.prefix', 'wp-api/');
             $options    = [
-                'auth'  => Config::get('wp-api.auth', false),
-                'debug' => Config::get('wp-api.debug', false)
+                'auth'              => Config::get('wp-api.auth', false),
+                'debug'             => Config::get('wp-api.debug', false),
+                'posts_per_page'    => Config::get('wp-api.posts_per_page', 10)
             ];
             $client     = new Client();
             
