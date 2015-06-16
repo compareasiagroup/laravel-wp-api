@@ -12,6 +12,7 @@ class WpApi
     {
         $this->options = array_merge([
             'auto' => null,
+            'posts_per_page' => 10,
             'debug' => false
         ], $options);
 
@@ -25,14 +26,35 @@ class WpApi
         }
     }
 
-    public function posts($page = null)
+    public function posts($page = null, $options = [])
     {
-        return $this->_resultsCollection($this->_get('posts', ['page' => $page]));
+        $opts = $this->extendDefaults($options);
+
+        return $this->_resultsCollection($this->_get(
+            'posts',
+            [
+                'page' => $page,
+                'filter' => [
+                    'posts_per_page' => $opts['posts_per_page']
+                ]
+            ]
+        ));
     }
 
-    public function pages($page = null)
+    public function pages($page = null, $options = [])
     {
-        return $this->_resultsCollection($this->_get('posts', ['type' => 'page', 'page' => $page]));
+        $opts = $this->extendDefaults($options);
+
+        return $this->_resultsCollection($this->_get(
+            'posts',
+            [
+                'type' => 'page',
+                'page' => $page,
+                'filter' => [
+                    'posts_per_page' => $opts['posts_per_page']
+                ]
+            ]
+        ));
     }
 
     public function post($slug)
@@ -55,29 +77,85 @@ class WpApi
         return $this->_resultsCollection($this->_get('taxonomies/post_tag/terms'));
     }
 
-    public function category_posts($slug, $page = null)
+    public function category_posts($slug, $page = null, $options = [])
     {
-        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['category_name' => $slug]]));
+        $opts = $this->extendDefaults($options);
+
+        return $this->_resultsCollection($this->_get(
+            'posts',
+            [
+                'page' => $page,
+                'filter' => [
+                    'category_name' => $slug,
+                    'posts_per_page' => $opts['posts_per_page']
+                ]
+            ]
+        ));
     }
 
-    public function author_posts($name, $page = null)
+    public function author_posts($name, $page = null, $options = [])
     {
-        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['author_name' => $name]]));
+        $opts = $this->extendDefaults($options);
+
+        return $this->_resultsCollection($this->_get(
+            'posts',
+            [
+                'page' => $page,
+                'filter' => [
+                    'author_name' => $name,
+                    'posts_per_page' => $opts['posts_per_page']
+                ]
+            ]
+        ));
     }
 
-    public function tag_posts($tags, $page = null)
+    public function tag_posts($tags, $page = null, $options = [])
     {
-        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['tag' => $tags]]));
+        $opts = $this->extendDefaults($options);
+
+        return $this->_resultsCollection($this->_get(
+            'posts',
+            [
+                'page' => $page,
+                'filter' => [
+                    'tag' => $tags,
+                    'posts_per_page' => $opts['posts_per_page']
+                ]
+            ]
+        ));
     }
 
-    public function search($query, $page = null)
+    public function search($query, $page = null, $options = [])
     {
-        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['s' => $query]]));
+        $opts = $this->extendDefaults($options);
+
+        return $this->_resultsCollection($this->_get(
+            'posts',
+            [
+                'page' => $page,
+                'filter' => [
+                    's' => $query,
+                    'posts_per_page' => $opts['posts_per_page']
+                ]
+            ]
+        ));
     }
 
-    public function archive($year, $month, $page = null)
+    public function archive($year, $month, $page = null, $options = [])
     {
-        return $this->_resultsCollection($this->_get('posts', ['page' => $page, 'filter' => ['year' => $year, 'monthnum' => $month]]));
+        $opts = $this->extendDefaults($options);
+
+        return $this->_resultsCollection($this->_get(
+            'posts',
+            [
+                'page' => $page,
+                'filter' => [
+                    'year' => $year,
+                    'monthnum' => $month,
+                    'posts_per_page' => $opts['posts_per_page']
+                ]
+            ]
+        ));
     }
 
     public function _get($method, array $query = array())
@@ -126,6 +204,16 @@ class WpApi
             $response['results'] = new ArticleCollection($response['results']);
         }
         return $response;
+    }
+
+    /**
+     * @param $options
+     */
+    protected function extendDefaults($options = [])
+    {
+        return array_merge([
+            'posts_per_page' => $this->options['posts_per_page']
+        ], $options);
     }
 
 }
