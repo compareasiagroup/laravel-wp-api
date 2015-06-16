@@ -1,6 +1,5 @@
 <?php namespace CompareAsiaGroup\LaravelWpApi;
 
-use GuzzleHttp\Client;
 use CompareAsiaGroup\LaravelWpApi\Models\ArticleCollection;
 
 class WpApi
@@ -8,7 +7,7 @@ class WpApi
 
     protected $client;
 
-    public function __construct($endpoint, $prefix=null, Client $client, $options = [])
+    public function __construct($endpoint, $prefix=null, $client, $options = [])
     {
         $this->options = array_merge([
             'auto' => null,

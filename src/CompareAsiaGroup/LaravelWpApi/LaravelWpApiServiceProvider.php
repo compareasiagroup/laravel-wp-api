@@ -1,8 +1,8 @@
 <?php namespace CompareAsiaGroup\LaravelWpApi;
 
+use CompareAsiaGroup\GuzzleCache\Facades\GuzzleCache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
-use GuzzleHttp\Client;
 
 class LaravelWpApiServiceProvider extends ServiceProvider {
 
@@ -41,8 +41,8 @@ class LaravelWpApiServiceProvider extends ServiceProvider {
                 'debug'             => Config::get('wp-api.debug', false),
                 'posts_per_page'    => Config::get('wp-api.posts_per_page', 10)
             ];
-            $client     = new Client();
-            
+            $client     = GuzzleCache::client();
+
             return new WpApi($endpoint, $prefix, $client, $options);
 
         });
