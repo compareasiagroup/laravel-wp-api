@@ -1,5 +1,11 @@
 {
     "name": "compareasiagroup/laravel-wp-api",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/compareasiagroup/GuzzleCache.git"
+        }
+  	],
     "description": "Laravel package for the Wordpress JSON REST API",
     "keywords": ["laravel", "package", "wordpress", "API", "REST"],
     "license": "BSD 2-Clause",
@@ -12,7 +18,8 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "~5.0",
-        "guzzlehttp/guzzle": "~5.0"
+        "guzzlehttp/guzzle": "~5.0",
+        "compareasiagroup/guzzlecache": "dev-master"
     },
     "autoload": {
         "psr-0": {
