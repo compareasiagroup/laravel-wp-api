@@ -27,28 +27,24 @@ class WpApi
 
     public function posts($page = null, $options = [])
     {
+        $options['page'] = $page;
         $opts = $this->extendDefaults($options);
-
+        
         return $this->_resultsCollection($this->_get(
             'posts',
-            [
-                'page' => $page,
-                'filter' => $opts
-            ]
+            $opts
         ));
     }
 
     public function pages($page = null, $options = [])
     {
+        $options['type'] = 'page';
+        $options['page'] = $page;
         $opts = $this->extendDefaults($options);
 
         return $this->_resultsCollection($this->_get(
             'posts',
-            [
-                'type' => 'page',
-                'page' => $page,
-                'filter' => $opts
-            ]
+            $opts
         ));
     }
 
@@ -76,78 +72,67 @@ class WpApi
 
     public function category_posts($slug, $page = null, $options = [])
     {
-        $options['category_name'] = $slug;
+        $options['page'] = $page;
+        $options['filter']['category_name'] = $slug;
         $opts = $this->extendDefaults($options);
 
         return $this->_resultsCollection($this->_get(
             'posts',
-            [
-                'page' => $page,
-                'filter' => $opts
-            ]
+            $opts
         ));
     }
 
     public function author_posts($name, $page = null, $options = [])
     {
-        $options['author_name'] = $name;
+        $options['page'] = $page;
+        $options['filter']['author_name'] = $name;
         $opts = $this->extendDefaults($options);
 
         return $this->_resultsCollection($this->_get(
             'posts',
-            [
-                'page' => $page,
-                'filter' => $opts
-            ]
+            $opts
         ));
     }
 
     public function tag_posts($tags, $page = null, $options = [])
     {
-        $options['tag'] = $tags;
+        $options['page'] = $page;
+        $options['filter']['tag'] = $tags;
         $opts = $this->extendDefaults($options);
 
         return $this->_resultsCollection($this->_get(
             'posts',
-            [
-                'page' => $page,
-                'filter' => $opts
-            ]
+            $opts
         ));
     }
 
     public function search($query, $page = null, $options = [])
     {
-        $options['s'] = $query;
+        $options['page'] = $page;
+        $options['filter']['s'] = $query;
         $opts = $this->extendDefaults($options);
 
         return $this->_resultsCollection($this->_get(
             'posts',
-            [
-                'page' => $page,
-                'filter' => $opts
-            ]
+            $opts
         ));
     }
 
     public function archive($year, $month, $page = null, $options = [])
     {
-        $options['year'] = $year;
-        $options['monthnum'] = $month;
+        $options['page'] = $page;
+        $options['filter']['year'] = $year;
+        $options['filter']['monthnum'] = $month;
         $opts = $this->extendDefaults($options);
 
         return $this->_resultsCollection($this->_get(
             'posts',
-            [
-                'page' => $page,
-                'filter' => $opts
-            ]
+            $opts
         ));
     }
 
     public function _get($method, array $query = array())
     {
-
         try {
 
             $query = ['query' => $query];
@@ -199,7 +184,9 @@ class WpApi
     protected function extendDefaults($options = [])
     {
         return array_merge([
-            'posts_per_page' => $this->options['posts_per_page']
+            'filter' => [
+                'posts_per_page' => $this->options['posts_per_page']
+            ]
         ], $options);
     }
 
